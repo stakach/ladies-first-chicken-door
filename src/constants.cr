@@ -1,7 +1,7 @@
 require "action-controller/logger"
 
-module App
-  NAME = "Spider-Gazelle"
+module DoorCtrl
+  NAME = "Ladies-First"
   {% begin %}
     VERSION = {{ `shards version "#{__DIR__}"`.chomp.stringify.downcase }}
   {% end %}
@@ -20,6 +20,10 @@ module App
 
   COOKIE_SESSION_KEY    = ENV["COOKIE_SESSION_KEY"]? || "_spider_gazelle_"
   COOKIE_SESSION_SECRET = ENV["COOKIE_SESSION_SECRET"]? || "4f74c0b358d5bab4000dd3c75465dc2c"
+
+  IO_CHIP_PATH          = Path[ENV["IO_CHIP_PATH"]? || "/dev/gpiochip0"]
+  RELAY_DOOR_OPEN_LINE  = (ENV["RELAY_DOOR_OPEN_LINE"]? || "5").to_i
+  RELAY_DOOR_CLOSE_LINE = (ENV["RELAY_DOOR_CLOSE_LINE"]? || "22").to_i
 
   def self.running_in_production?
     IS_PRODUCTION

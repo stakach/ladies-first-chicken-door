@@ -1,11 +1,14 @@
-name: spider-gazelle
-version: 2.0.0
+name: ladies-first-chicken-door
+version: 1.0.0
 
 dependencies:
   # The server framework
   action-controller:
     github: spider-gazelle/action-controller
-    version: ~> 7.0
+
+  # the IO control
+  gpio:
+    github: spider-gazelle/gpio.cr
 
 development_dependencies:
   ameba:
@@ -15,5 +18,5 @@ development_dependencies:
 
 # compile target
 targets:
-  app:
+  doorctrl:
     main: src/app.cr

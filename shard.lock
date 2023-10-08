@@ -20,6 +20,10 @@ shards:
     git: https://github.com/crystal-community/future.cr.git
     version: 1.0.0
 
+  gpio:
+    git: https://github.com/spider-gazelle/gpio.cr.git
+    version: 1.0.0
+
   habitat:
     git: https://github.com/luckyframework/habitat.git
     version: 0.4.8

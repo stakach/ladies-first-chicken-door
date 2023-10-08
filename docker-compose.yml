@@ -3,9 +3,18 @@ services:
   # The Spider-Gazelle service
   # run: `docker-compose build` to update the service
   # run: `docker-compose up -d` to launch the service
-  sg:
+  ladiesfirst:
     build: .
     ports:
       - "3000:3000"
     environment:
       SG_ENV: "production"
+      IO_CHIP_PATH: "/dev/gpiochip0"
+      RELAY_DOOR_OPEN_LINE: "5"
+      RELAY_DOOR_CLOSE_LINE: "22"
+    devices:
+      - "/dev/gpiochip0"
+    # if specifying capabilities doesn't work can do:
+    # privileged: true
+    cap_add:
+      - SYS_RAWIO
