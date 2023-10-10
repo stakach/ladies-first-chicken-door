@@ -2,6 +2,25 @@
 
 This is a small webservice for controlling the [ladies first chicken door](https://www.ladiesfirstchickendoor.com/) remotely
 
+* GET http://hostname:3000/api/ladiesfirst/door
+
+returns a status object
+
+```json
+{
+    "state": "sensor",
+    "close_line": 22,
+    "close_active": false,
+    "open_line": 5,
+    "open_active": false
+}
+```
+
+Open the door:
+
+* POST http://hostname:3000/api/ladiesfirst/door/open
+  * accepts: `open`, `close`, `sensor`
+
 ## Building image
 
 I have an image at stakach/ladiesfirst that you can use (see docker-compose.yml)
