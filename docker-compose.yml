@@ -5,6 +5,7 @@ services:
   # run: `docker-compose up -d` to launch the service
   ladiesfirst:
     build: .
+    # image: stakach/ladiesfirst
     ports:
       - "3000:3000"
     environment:
@@ -14,7 +15,8 @@ services:
       RELAY_DOOR_CLOSE_LINE: "22"
     devices:
       - "/dev/gpiochip0"
-    # if specifying capabilities doesn't work can do:
-    # privileged: true
+    # if specifying capabilities doesn't work
+    # you need to configure udev rules or can just:
+    # user: root
     cap_add:
       - SYS_RAWIO

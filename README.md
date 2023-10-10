@@ -1,44 +1,45 @@
-# Spider-Gazelle Application Template
+# Ladies First Chicken Door Control
 
-[![CI](https://github.com/spider-gazelle/spider-gazelle/actions/workflows/ci.yml/badge.svg)](https://github.com/spider-gazelle/spider-gazelle/actions/workflows/ci.yml)
+This is a small webservice for controlling the [ladies first chicken door](https://www.ladiesfirstchickendoor.com/) remotely
 
-Clone this repository to start building your own spider-gazelle based application.
-This is a template and as such, Do What the Fuck You Want To
+## Building image
 
-## Documentation
+I have an image at stakach/ladiesfirst that you can use (see docker-compose.yml)
 
-Detailed documentation and guides available: https://spider-gazelle.net/
-
-* [Action Controller](https://github.com/spider-gazelle/action-controller) base class for building [Controllers](http://guides.rubyonrails.org/action_controller_overview.html)
-* [Active Model](https://github.com/spider-gazelle/active-model) base class for building [ORMs](https://en.wikipedia.org/wiki/Object-relational_mapping)
-* [Habitat](https://github.com/luckyframework/habitat) configuration and settings for Crystal projects
-* [router.cr](https://github.com/tbrand/router.cr) base request handling
-* [Radix](https://github.com/luislavena/radix) Radix Tree implementation for request routing
-* [HTTP::Server](https://crystal-lang.org/api/latest/HTTP/Server.html) built-in Crystal Lang HTTP server
-  * Request
-  * Response
-  * Cookies
-  * Headers
-  * Params etc
-
-
-Spider-Gazelle builds on the amazing performance of **router.cr** [here](https://github.com/tbrand/which_is_the_fastest).:rocket:
-
-
-## Testing
-
-`crystal spec`
-
-* to run in development mode `crystal ./src/app.cr`
-
-## Compiling
-
-`crystal build ./src/app.cr`
+```
+docker buildx build --progress=plain --label org.opencontainers.image.title=ladiesfirst --platform linux/arm64 --tag stakach/ladiesfirst:latest --push .
+```
 
 ### Deploying
 
-Once compiled you are left with a binary `./app`
+Designed to run on a [raspberry pi zero or zero 2 wireless](https://www.raspberrypi.com/products/raspberry-pi-zero-2-w/) with a [relay hat](https://thepihut.com/products/zero-relay-2-channel-5v-relay-board-for-pi-zero)
 
-* for help `./app --help`
-* viewing routes `./app --routes`
-* run on a different port or host `./app -b 0.0.0.0 -p 80`
+Configuring the pi from scratch:
+
+1. Use the [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
+1. configure with Raspberry Pi OS (other) -> Raspberry Pi OS Lite (64bit)
+1. log into the OS and update: `sudo apt update && sudo apt install -y`
+1. Install docker-compse
+   * https://docs.docker.com/engine/install/debian/#install-using-the-repository
+   * https://docs.docker.com/engine/install/linux-postinstall/
+   * sudo apt install docker-compose
+1. git clone https://github.com/stakach/ladies-first-chicken-door
+1. cd ladies-first-chicken-door
+1. ./setup_gpio.sh
+1. docker-compose up -d
+
+Customise docker-compose.yml to match your setup as required. The setup script configures access to the hardware using `udev` so it can be used from within the docker container. The docker image is highly secure by default.
+
+## Documentation
+
+Relay channels 1 and 2 are connected with pin numbers 15 and 29 of the Raspberry Pi GPIO respectively according to the [relay hat details](https://thepihut.com/products/zero-relay-2-channel-5v-relay-board-for-pi-zero)
+
+So given the pinout:
+
+![image](https://github.com/stakach/ladies-first-chicken-door/assets/368013/bed9bc59-0e4f-47cf-abd9-827de9f3b5b2)
+[pinout details](https://www.etechnophiles.com/rpi-zero-2w-board-layout-pinout-specs-price/#rpi-zero-2w-gpio-pinout-in-detail)
+
+and given the output from running `gpioinfo` (install via `sudo apt install gpiod libgpiod-dev`) we can determine the lines that the relays run on.
+
+* Relay channel 1 == pin15, GPIO22 (line 22)
+* Relay channel 2 == pin29, GPIO5  (line 5)

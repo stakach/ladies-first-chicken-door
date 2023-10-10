@@ -22,7 +22,7 @@ shards:
 
   gpio:
     git: https://github.com/spider-gazelle/gpio.cr.git
-    version: 1.0.0
+    version: 1.1.0
 
   habitat:
     git: https://github.com/luckyframework/habitat.git
