@@ -23,18 +23,11 @@ class DoorCtrl::Door < DoorCtrl::Application
 
   @@mutex = Mutex.new
 
-  getter close_relay : GPIO::Line { self.class.close_relay }
-  getter open_relay : GPIO::Line { self.class.open_relay }
-
-  # the current state of the chicken door
-  @[AC::Route::GET("/")]
-  def status : State
+  def self.status : State
     State.new(close_relay, open_relay)
   end
 
-  # change the state of the chicken door
-  @[AC::Route::POST("/:door")]
-  def set_state(door : DoorState) : State
+  def self.set_state(door : DoorState) : State
     @@mutex.synchronize do
       door_current = status
       case door
@@ -56,7 +49,20 @@ class DoorCtrl::Door < DoorCtrl::Application
       in .invalid?
         raise AC::Route::Param::ValueError.new("bad door state value", "door", "one of open, close or sensor")
       end
+      File.write("state.txt", door.to_s)
       status
     end
+  end
+
+  # the current state of the chicken door
+  @[AC::Route::GET("/")]
+  def status : State
+    self.class.status
+  end
+
+  # change the state of the chicken door
+  @[AC::Route::POST("/:door")]
+  def set_state(door : DoorState) : State
+    self.class.set_state(door)
   end
 end

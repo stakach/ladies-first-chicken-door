@@ -52,4 +52,8 @@ module DoorCtrl
     # HTTPS only:
     settings.secure = running_in_production?
   end
+
+  # set the initial state based on state.txt
+  state = DoorState.parse(File.read("state.txt").strip) rescue DoorState::Close
+  Door.set_state state
 end
