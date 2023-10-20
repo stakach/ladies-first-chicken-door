@@ -84,6 +84,8 @@ RUN for binary in /app/bin/*; do \
 
 # Generate OpenAPI docs while we still have source code access
 RUN ./bin/doorctrl --docs --file=openapi.yml
+RUN echo "close" > /app/state.txt
+RUN chown 10001 /app/state.txt
 
 # Build a minimal docker image
 FROM scratch
@@ -110,6 +112,7 @@ COPY --from=build /app/bin /
 
 # Copy the docs into the container, you can serve this file in your app
 COPY --from=build /app/openapi.yml /openapi.yml
+COPY --from=build /app/state.txt /state.txt
 
 # Use an unprivileged user.
 USER appuser:appuser
