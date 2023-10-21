@@ -26,7 +26,7 @@ class DoorCtrl::Platform < DoorCtrl::Application
   def wifi_strength : Float64
     wireless_info = File.read(NET_WIRELESS).strip
     match_data = wireless_info.match(/wlan0:.*\s+(\d+)\./)
-    raise "no wifi network found" unless match_data
+    raise "no wifi network found:\n#{wireless_info}" unless match_data
 
     # Extract the link quality
     link_quality = match_data[1].to_f
