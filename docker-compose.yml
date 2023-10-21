@@ -14,12 +14,13 @@ services:
       IO_CHIP_PATH: "/dev/gpiochip0"
       RELAY_DOOR_OPEN_LINE: "5"
       RELAY_DOOR_CLOSE_LINE: "22"
+      NET_WIRELESS: "/tmp/net_wireless"
     volumes:
       # CPU temp
       - /sys/class/thermal/thermal_zone0/temp:/sys/class/thermal/thermal_zone0/temp
 
       # Wireless signal strength
-      - /proc/net/wireless:/proc/net/wireless
+      - /proc/net/wireless:/tmp/net_wireless:ro
     devices:
       - "/dev/gpiochip0"
     # if specifying capabilities doesn't work

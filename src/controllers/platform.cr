@@ -2,6 +2,8 @@
 class DoorCtrl::Platform < DoorCtrl::Application
   base "/api/ladiesfirst/platform"
 
+  NET_WIRELESS = ENV["NET_WIRELESS"]?.presence || "/proc/net/wireless"
+
   # Summary of the system
   @[AC::Route::GET("/")]
   def overview
@@ -22,7 +24,7 @@ class DoorCtrl::Platform < DoorCtrl::Application
   # The current wifi signal strength
   @[AC::Route::GET("/wifi_strength")]
   def wifi_strength : Float64
-    wireless_info = File.read("/proc/net/wireless").strip
+    wireless_info = File.read(NET_WIRELESS).strip
     match_data = wireless_info.match(/wlan0:.*\s+(\d+)\./)
     raise "no wifi network found" unless match_data
 
