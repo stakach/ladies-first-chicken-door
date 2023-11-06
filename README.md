@@ -40,8 +40,8 @@ Configuring the pi from scratch:
 1. log into the OS and update: `sudo apt update && sudo apt install -y`
 1. Install docker-compse
    * https://docs.docker.com/engine/install/debian/#install-using-the-repository
-   * https://docs.docker.com/engine/install/linux-postinstall/
    * sudo apt install docker-compose
+   * https://docs.docker.com/engine/install/linux-postinstall/
 1. git clone https://github.com/stakach/ladies-first-chicken-door
 1. cd ladies-first-chicken-door
 1. ./setup_gpio.sh
