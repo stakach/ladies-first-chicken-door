@@ -19,6 +19,9 @@ services:
     volumes:
       # CPU temp
       - /sys/class/thermal/thermal_zone0/temp:/sys/class/thermal/thermal_zone0/temp
+
+      # Save state on the local FS
+      # - /home/steve/door-state.txt:/state.txt
     devices:
       - "/dev/gpiochip0"
     # if specifying capabilities doesn't work
@@ -26,3 +29,8 @@ services:
     # user: root
     cap_add:
       - SYS_RAWIO
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

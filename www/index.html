@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Door Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Additional styles if needed */
+    </style>
+</head>
+<body class="bg-gray-800 text-white font-sans">
+    <div class="container mx-auto p-4">
+        <div class="flex justify-between items-center mb-6">
+            <div class="text-2xl">
+                Door: <span id="door">close</span>
+            </div>
+            <div class="text-2xl">
+                Temperature: <span id="temperature">45</span>°C
+            </div>
+            <div class="text-2xl">
+                Wireless Signal: <span id="wireless">61</span>%
+            </div>
+        </div>
+        <div class="flex flex-col space-y-4">
+            <button onclick="change_door_state('open')" id="openButton" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                Open
+            </button>
+            <button onclick="change_door_state('sensor')" id="sensorButton" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                Sensor
+            </button>
+            <button onclick="change_door_state('close')" id="closeButton" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                Close
+            </button>
+        </div>
+    </div>
+    <script>
+        async function platform_stats() {
+            try {
+                const response = await fetch("/api/ladiesfirst/platform");
+                const result = await response.json();
+                document.getElementById('temperature').innerText = result.cpu_temp;
+                document.getElementById('wireless').innerText = result.wifi_strength;
+
+                console.log("Success:", result);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        function update_door(state) {
+            document.getElementById('door').innerText = state.state;
+        }
+
+        async function get_door_state() {
+            try {
+                const response = await fetch("/api/ladiesfirst/door");
+                const result = await response.json();
+                update_door(result);
+
+                console.log("Success:", result);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        async function change_door_state(state) {
+            try {
+                const response = await fetch("/api/ladiesfirst/door/" + state, {
+                    method: "POST",
+                });
+                const result = await response.json();
+                update_door(result);
+
+                console.log("Success:", result);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        function fetch_state() {
+            get_door_state();
+            platform_stats();
+        }
+
+        setInterval(fetch_state, 30000);
+        fetch_state();
+    </script>
+</body>
+</html>

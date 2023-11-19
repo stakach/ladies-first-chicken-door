@@ -87,6 +87,9 @@ RUN ./bin/doorctrl --docs --file=openapi.yml
 RUN echo "close" > /app/state.txt
 RUN chown 10001 /app/state.txt
 
+# copy the www folder after the build
+COPY ./www /app/www
+
 # Build a minimal docker image
 FROM scratch
 WORKDIR /
@@ -113,6 +116,7 @@ COPY --from=build /app/bin /
 # Copy the docs into the container, you can serve this file in your app
 COPY --from=build /app/openapi.yml /openapi.yml
 COPY --from=build /app/state.txt /state.txt
+COPY --from=build /app/www /www
 
 # Use an unprivileged user.
 USER appuser:appuser
@@ -123,4 +127,4 @@ HEALTHCHECK CMD ["/doorctrl", "-c", "http://127.0.0.1:3000/"]
 # Run the app binding on port 3000
 EXPOSE 3000
 ENTRYPOINT ["/doorctrl"]
-CMD ["/doorctrl", "-b", "0.0.0.0", "-p", "3000"]
+CMD ["/doorctrl", "-p", "3000"]
