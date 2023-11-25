@@ -1,0 +1,5 @@
+# open at 10am
+0 10 * * * /usr/bin/curl -X POST http://localhost:3000/api/ladiesfirst/door/sensor
+
+# close at 9pm (door will have sensor closed already)
+0 21 * * * /usr/bin/curl -X POST http://localhost:3000/api/ladiesfirst/door/close
