@@ -44,8 +44,9 @@ Configuring the pi from scratch:
    * https://docs.docker.com/engine/install/linux-postinstall/
 1. git clone https://github.com/stakach/ladies-first-chicken-door
 1. cd ladies-first-chicken-door
-1. ./setup_gpio.sh
+1. ./scripts/setup_gpio.sh
 1. docker-compose up -d
+1. setup door_boot.service to launch boot_script.sh to ensure the door is in the correct state on boot
 
 Customise docker-compose.yml to match your setup as required. The setup script configures access to the hardware using `udev` so it can be used from within the docker container. The docker image is highly secure by default.
 

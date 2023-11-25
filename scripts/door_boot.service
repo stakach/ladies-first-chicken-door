@@ -1,0 +1,11 @@
+[Unit]
+Description=Configure door state for current time
+Wants=network-online.target systemd-timesyncd.target
+After=network-online.target systemd-timesyncd.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/steve/boot_script.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,20 @@
+{
+  "cloudflare": [
+    {
+      "authentication": {
+        "api_token": "XXXXXX"
+      },
+      "zone_id": "XXXXX",
+      "subdomains": [
+        {
+          "name": "ladiesfirst",
+          "proxied": false
+        }
+      ]
+    }
+  ],
+  "a": false,
+  "aaaa": true,
+  "purgeUnknownRecords": false,
+  "ttl": 300
+}
