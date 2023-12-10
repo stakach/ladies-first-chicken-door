@@ -46,3 +46,5 @@ else
     echo "Time is out of range. Closing the door."
     curl -X POST http://localhost:3000/api/ladiesfirst/door/close
 fi
+
+# NOTE:: execute pi_juice_poweron_config.py here
