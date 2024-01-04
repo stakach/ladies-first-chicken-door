@@ -26,7 +26,7 @@ abstract class DoorCtrl::Application < ActionController::Base
     if auth = request.headers["Authorization"]?
       auth = Base64.decode_string auth.lchop("Basic ")
       code = auth.split(':', 2)[1]
-      if TOTP.validate_number_string(DoorCtrl::TOTP_SECRET, code)
+      if TOTP.validate_number_string(DoorCtrl::TOTP_SECRET, code, 30000)
         session["authed"] = true
         return
       end

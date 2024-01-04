@@ -11,12 +11,17 @@ check_ntp_sync() {
 
 # check web service availability
 check_web_service() {
-    if curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/ladiesfirst/door | grep -q '200'; then
+    # Extract the password from the Docker command output
+    password=$(docker exec -it ladiesfirst /doorctrl --access | grep 'Current code: ' | awk '{print $3}' | tr -d '\r')
+
+    if curl -s -o /dev/null -w "%{http_code}" -u admin:$password http://localhost:3000/api/ladiesfirst/door | grep -q '200'; then
         return 0
     else
         return 1
     fi
 }
+
+trap 'echo "Error occurred. Continuing..."; continue' ERR
 
 # loop until available
 while true; do
@@ -39,12 +44,15 @@ current_time=$(get_current_time)
 start_time="09:50"
 end_time="20:50"
 
+# Extract the password from the Docker command output
+password=$(docker exec -it ladiesfirst /doorctrl --access | grep 'Current code: ' | awk '{print $3}' | tr -d '\r')
+
 if [[ "$current_time" > "$start_time" && "$current_time" < "$end_time" ]]; then
     echo "Time is within range. Sending sensor signal."
-    curl -X POST http://localhost:3000/api/ladiesfirst/door/sensor
+    curl -X POST -u admin:$password http://localhost:3000/api/ladiesfirst/door/sensor
 else
     echo "Time is out of range. Closing the door."
-    curl -X POST http://localhost:3000/api/ladiesfirst/door/close
+    curl -X POST -u admin:$password http://localhost:3000/api/ladiesfirst/door/close
 fi
 
 # NOTE:: execute pi_juice_poweron_config.py here

@@ -1,5 +1,14 @@
 # open at 10am
-0 10 * * * /usr/bin/curl -X POST http://localhost:3000/api/ladiesfirst/door/sensor
+0 10 * * * /home/steve/door_sensor.sh
 
 # close at 9pm (door will have sensor closed already)
-0 21 * * * /usr/bin/curl -X POST http://localhost:3000/api/ladiesfirst/door/close
+0 21 * * * /home/steve/door_close.sh
+
+# power off the computer at 9:30pm
+30 21 * * * /home/steve/pi_juice_poweroff.py
+
+# power off the computer at 9:30pm
+30 21 * * * /usr/bin/python3 /home/steve/pi_juice_poweroff.py
+
+# ensure the power schedule is configured (every hour)
+0 * * * * /usr/bin/python3 /home/steve/pi_juice_poweron_config.py
