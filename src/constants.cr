@@ -1,4 +1,5 @@
 require "action-controller/logger"
+require "./models/two_factor"
 
 module DoorCtrl
   NAME = "Ladies-First"
@@ -18,12 +19,14 @@ module DoorCtrl
 
   STATIC_FILE_PATH = ENV["PUBLIC_WWW_PATH"]? || "./www"
 
-  COOKIE_SESSION_KEY    = ENV["COOKIE_SESSION_KEY"]? || "_spider_gazelle_"
-  COOKIE_SESSION_SECRET = ENV["COOKIE_SESSION_SECRET"]? || "4f74c0b358d5bab4000dd3c75465dc2c"
-
   IO_CHIP_PATH          = Path[ENV["IO_CHIP_PATH"]? || "/dev/gpiochip0"]
   RELAY_DOOR_OPEN_LINE  = (ENV["RELAY_DOOR_OPEN_LINE"]? || "5").to_i
   RELAY_DOOR_CLOSE_LINE = (ENV["RELAY_DOOR_CLOSE_LINE"]? || "22").to_i
+
+  # security
+  TOTP_SECRET           = ENV["TOTP_SECRET"] || TOTP.generate_base32_secret
+  COOKIE_SESSION_KEY    = ENV["COOKIE_SESSION_KEY"]? || "_spider_gazelle_"
+  COOKIE_SESSION_SECRET = ENV["COOKIE_SESSION_SECRET"]? || TOTP_SECRET
 
   def self.running_in_production?
     IS_PRODUCTION

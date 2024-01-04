@@ -1,5 +1,6 @@
 require "option_parser"
 require "./constants"
+require "./models/two_factor"
 
 module DoorCtrl
   # Server defaults
@@ -25,6 +26,21 @@ module DoorCtrl
 
     parser.on("-v", "--version", "Display the application version") do
       puts "#{NAME} v#{VERSION}"
+      exit 0
+    end
+
+    parser.on("-i ID", "--2fa=ID", "generates the 2fa QR code with the specified identifier") do |id|
+      secret = ENV["TOTP_SECRET"]?
+      if secret
+        TwoFactor.print_totp_qr_code(id, secret)
+      else
+        puts "must configure 'TOTP_SECRET' ENV var"
+      end
+      exit 0
+    end
+
+    parser.on("-t", "--totp", "generates a totp secret") do
+      puts "export TOTP_SECRET=#{TOTP.generate_base32_secret(32)}"
       exit 0
     end
 

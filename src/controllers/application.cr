@@ -1,3 +1,4 @@
+require "base64"
 require "uuid"
 require "yaml"
 
@@ -16,11 +17,27 @@ abstract class DoorCtrl::Application < ActionController::Base
       request_id: request_id
     )
     response.headers["X-Request-ID"] = request_id
+  end
 
-    # If this is an upstream service, the ID should be extracted from a request header.
-    # request_id = request.headers["X-Request-ID"]? || UUID.random.to_s
-    # Log.context.set client_ip: client_ip, request_id: request_id
-    # response.headers["X-Request-ID"] = request_id
+  # check if authenticated
+  @[AC::Route::Filter(:before_action)]
+  def ensure_authenticated
+    return if session["authed"]?
+    if auth = request.headers["Authorization"]?
+      auth = Base64.decode_string auth.lchop("Basic ")
+      code = auth.split(':', 2)[1]
+      if TOTP.validate_number_string(DoorCtrl::TOTP_SECRET, code)
+        session["authed"] = true
+        return
+      end
+    end
+    raise AC::Error::Unauthorized.new
+  end
+
+  # requests basic authentication
+  @[AC::Route::Exception(AC::Error::Unauthorized, status_code: HTTP::Status::UNAUTHORIZED)]
+  def unauthorized(_error) : Nil
+    response.headers["WWW-Authenticate"] = %(Basic realm="ChickenDoor", charset="UTF-8")
   end
 
   # covers no acceptable response format and not an acceptable post format

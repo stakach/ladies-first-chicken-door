@@ -36,4 +36,9 @@ class DoorCtrl::Platform < DoorCtrl::Application
     quality_percentage = (link_quality / max_quality) * 100.0
     quality_percentage.round(1)
   end
+
+  @[AC::Route::GET("/auth_test")]
+  def auth_test : String
+    "authenticated"
+  end
 end

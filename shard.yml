@@ -10,6 +10,18 @@ dependencies:
   gpio:
     github: spider-gazelle/gpio.cr
 
+  # security
+  crystal-two-factor-auth:
+    github: stakach/crystal-two-factor-auth
+
+  # QR code generation
+  qr-code:
+    github: spider-gazelle/qr-code
+
+  # image generation
+  stumpy_png:
+    github: stumpycr/stumpy_png
+
 development_dependencies:
   ameba:
     github: veelenga/ameba
