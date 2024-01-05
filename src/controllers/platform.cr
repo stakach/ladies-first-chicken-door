@@ -37,6 +37,7 @@ class DoorCtrl::Platform < DoorCtrl::Application
     quality_percentage.round(1)
   end
 
+  # check if we are authenticated
   @[AC::Route::GET("/auth_test")]
   def auth_test : String
     "authenticated"

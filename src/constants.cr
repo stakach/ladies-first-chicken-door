@@ -24,7 +24,7 @@ module DoorCtrl
   RELAY_DOOR_CLOSE_LINE = (ENV["RELAY_DOOR_CLOSE_LINE"]? || "22").to_i
 
   # security
-  TOTP_SECRET           = ENV["TOTP_SECRET"] || TOTP.generate_base32_secret
+  TOTP_SECRET           = ENV["TOTP_SECRET"]? || TOTP.generate_base32_secret
   COOKIE_SESSION_KEY    = ENV["COOKIE_SESSION_KEY"]? || "_spider_gazelle_"
   COOKIE_SESSION_SECRET = ENV["COOKIE_SESSION_SECRET"]? || TOTP_SECRET
 
