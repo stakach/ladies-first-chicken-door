@@ -12,7 +12,7 @@ check_ntp_sync() {
 # check web service availability
 check_web_service() {
     # Extract the password from the Docker command output
-    password=$(docker exec -it ladiesfirst /doorctrl --access | grep 'Current code: ' | awk '{print $3}' | tr -d '\r')
+    password=$(docker exec ladiesfirst /doorctrl --access | grep 'Current code: ' | awk '{print $3}' | tr -d '\r')
 
     if curl -s -o /dev/null -w "%{http_code}" -u admin:$password http://localhost:3000/api/ladiesfirst/door | grep -q '200'; then
         return 0
@@ -45,7 +45,7 @@ start_time="09:50"
 end_time="20:50"
 
 # Extract the password from the Docker command output
-password=$(docker exec -it ladiesfirst /doorctrl --access | grep 'Current code: ' | awk '{print $3}' | tr -d '\r')
+password=$(docker exec ladiesfirst /doorctrl --access | grep 'Current code: ' | awk '{print $3}' | tr -d '\r')
 
 if [[ "$current_time" > "$start_time" && "$current_time" < "$end_time" ]]; then
     echo "Time is within range. Sending sensor signal."
