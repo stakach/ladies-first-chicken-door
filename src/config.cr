@@ -50,7 +50,7 @@ module DoorCtrl
     settings.key = COOKIE_SESSION_KEY
     settings.secret = COOKIE_SESSION_SECRET
     # HTTPS only:
-    settings.secure = running_in_production?
+    settings.secure = false
   end
 
   # set the initial state based on state.txt
