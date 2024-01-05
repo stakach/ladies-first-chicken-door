@@ -1,6 +1,7 @@
 require "option_parser"
 require "./constants"
 require "./models/two_factor"
+require "base64"
 
 module DoorCtrl
   # Server defaults
@@ -41,6 +42,18 @@ module DoorCtrl
 
     parser.on("-t", "--totp", "generates a totp secret") do
       puts "export TOTP_SECRET=#{TOTP.generate_base32_secret(32)}"
+      exit 0
+    end
+
+    parser.on("-a", "--access", "generates a valid authorisation header") do
+      secret = ENV["TOTP_SECRET"]?
+      if secret
+        code = TOTP.generate_number_string(secret)
+        puts "Current code: #{code}"
+        puts "Authorization: Basic #{Base64.strict_encode(":#{code}")}"
+      else
+        puts "must configure 'TOTP_SECRET' ENV var"
+      end
       exit 0
     end
 

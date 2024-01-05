@@ -6,6 +6,8 @@ services:
   ladiesfirst:
     build: .
     # image: stakach/ladiesfirst
+
+    container_name: ladiesfirst
     restart: unless-stopped
     network_mode: host
     # host network required for wifi signal strength
