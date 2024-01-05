@@ -41,5 +41,21 @@ sleep(10)
 
 logger.info('Enabling wakeup timer')
 
-# Make sure wakeup_enabled, independently configured to wake up at 5am
+# configure wake up for 5am local (times need to be in UTC)
+alarm = {}
+alarm['second'] = 0
+alarm['minute'] = 0
+alarm['day'] = 'EVERY_DAY'
+# 5am in Australia/Sydney
+alarm['hour'] = 18
+status = pj.rtcAlarm.SetAlarm(alarm)
+
+if status['error'] != 'NO_ERROR':
+    logger.info(' - failed to apply wakeup alarm options. Error: {}'.format(status['error']))
+
+sleep(1)
+
+# Make sure wakeup_enabled
 pj.rtcAlarm.SetWakeupEnabled(True)
+
+logger.info(' - timer configured success')

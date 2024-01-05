@@ -16,6 +16,9 @@ services:
       IO_CHIP_PATH: "/dev/gpiochip0"
       RELAY_DOOR_OPEN_LINE: "5"
       RELAY_DOOR_CLOSE_LINE: "22"
+      # update this when deploying
+      TOTP_SECRET: "NAOUCEFY62JLQPP3ZHZJFKTFJMGXAAKS"
+
     volumes:
       # CPU temp
       - /sys/class/thermal/thermal_zone0/temp:/sys/class/thermal/thermal_zone0/temp
